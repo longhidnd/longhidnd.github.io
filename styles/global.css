@@ -4,6 +4,83 @@
     padding: 0;
 
     --background-color: #2e2e2e;
+    --div-color: #3e3e3e;
     --titlebar-color: #1e1e1e;
     --accent-color: #f00;
+    --transparent: #00000000;
+
+    color: #fff;
+
+}
+
+h1 {
+    padding: 0rem;
+    margin: 0rem;
+}
+
+hr {
+    border-color: var(--accent-color);
+}
+hr.invisible {
+    border: none;
+    height: .2rem;  
+}
+
+input[type="text"], select {
+    width: 100%;
+    background-color: var(--transparent);
+    border-style: none;
+    border-bottom-style: solid;
+    border-color: var(--accent-color);
+
+    margin: 0;
+    color: white;
+}
+
+
+body {
+    background-color: var(--background-color);
+
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.flexrow {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.big-btn {
+    padding: 1ch;
+    border-style: solid;
+    border-color: var(--accent-color);
+    background-color: var(--transparent);
+    color: white;
+    transition: background-color 100ms;
+    margin: 1rem;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.big-btn:hover {
+    background-color: var(--accent-color);
+}
+
+accent-color {
+    color: var(--accent-color);
+}
+
+#language-select {
+    width: 3rem;
+    position: fixed;
+    top: 0;
+    right: 0;
+    margin: 1rem;
 }

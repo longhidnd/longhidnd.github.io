@@ -1,0 +1,56 @@
+.sidepanel {
+    position: fixed;
+    top: 0;
+    right: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column-reverse;
+
+    transition: all 100ms;
+}
+
+.sidepanel-block {
+    min-width: fit-content;
+    margin: 1rem;
+    padding: 1rem;
+    border-radius: 1rem;
+    background-color: var(--background-color);
+    box-shadow: 0 0 .1rem;
+
+}
+
+.sidepanel-title {
+    margin: 0;
+    padding: 0;
+}
+.sidepanel-subtitle {
+    margin: 0;
+    padding: 0;
+}
+
+.overlay-wrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background-color: #00000044;
+}
+
+.create-character-gui {
+    /*border-style: solid;
+    border-width: .1rem;
+    border-color: var(--accent-color);*/
+    border-radius: 1rem;
+    background-color: var(--background-color);
+    box-shadow: 0 0 .1rem;
+    
+    padding: 1rem;
+}

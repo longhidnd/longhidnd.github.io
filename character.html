@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LonghiDND | Character</title>
+
+    <link rel="stylesheet" href="styles/global.css">
+    <link rel="stylesheet" href="styles/character.css">
+
+    <script>
+        //// LANGUAGE & TEXT ////
+
+        // load language file, if no language is set, use en_US
+        if(localStorage.getItem('language') != null) {
+            language = localStorage.getItem('language');
+        } else {
+            language = "en_US";
+            localStorage.setItem("language", "en_US");
+        }
+        langscript = document.createElement('script');
+        langscript.src = "language/"+language+".js";
+        document.head.appendChild(langscript);
+    </script>
+</head>
+<body>
+    
+    <button>hello, i am a cool button</button>
+
+    <div class="overlay-wrapper hidden">
+        <div class="create-character-gui hidden">
+            <h1 data-tag="character.creation.title"></h1>
+            
+            <hr class="invisible">
+
+            <input type="text" placeholder="Name" id="character-creation-name">
+            
+            <hr class="invisible">
+
+            <select name="race" id="race">
+                <option value="lightfoot_haffling" data-tag="character.races.lightfoot_haffling"></option>
+            </select>
+
+            <hr class="invisible">
+
+            <select name="class" id="class">
+                <option value="rogue" data-tag="character.classes.rogue"></option>
+            </select>
+
+            <hr class="invisible">
+
+            <div class="big-btn" data-tag="character.creation.create">CREATE</div>
+        </div>
+        <div class="load-character-gui hidden">hello, im the character loading gui</div>
+    </div>
+
+    <div class="sidepanel">
+        
+    </div>
+
+    <script defer>
+        //// ERRORS ////
+
+        if (!localStorage) {
+            window.location.assign('/error.html?no_localStorage'); // redirect to no_localStorage error page.
+        }
+        
+        //// CHARACTER PAGE CODE ////
+
+        const rawdiceroll = (times,sides) => {
+            var result = 0;
+            for (let i = 0; i < times; i++) {
+                result += 1 + Math.floor(Math.random() * (sides-1));              
+            }
+            return result 
+        }
+
+        const parseDice = (dice) => {
+            if (dice.includes('+')) {
+                var dice_split_plus = dice.split('+')
+                var dicestring = dice_split_plus[0]
+                var modifier = dice_split_plus[1]
+            } else if (dice.includes('-')) {
+                var dice_split_minus = dice.split('-')
+                var dicestring = dice_split_minus[0]
+                var modifier = dice_split_minus[1] * -1
+            } else {
+                var dicestring = dice;
+                var modifier = 0;
+            }
+
+            var dicestring_split_d = dicestring.split('d')
+            var times = dicestring_split_d[0];
+            var sides = dicestring_split_d[1];
+
+            return [parseInt(times), parseInt(sides), parseInt(modifier)];
+        }
+
+        const roll = (subtitle, dice) => {
+            
+            // parse dice expression and define amount, sides and modifier
+            parsed_dice = parseDice(dice);
+            var times = parsed_dice[0];
+            var sides = parsed_dice[1];
+            var modifier = parsed_dice[2];
+
+            // generate number and add modifier
+            var diceroll = rawdiceroll(times, sides);
+            var title = diceroll + modifier;
+
+            // generate natural string title+modifier or title-modifier
+            if (modifier >= 0) {
+                var natural = diceroll + "+" + modifier;
+            } else {
+                var natural = diceroll + '' + modifier
+            }
+
+            // create wrapper div
+            var wrapper = document.createElement('div')
+            wrapper.className = 'sidepanel-block'
+
+            // create title h1
+            var block_title = document.createElement('h1')
+            block_title.className = 'sidepanel-title'
+            block_title.innerText = title;
+
+            // create subtitle p
+            var block_subtitle = document.createElement('p')
+            block_subtitle.className = 'sidepanel-subtitle'
+            block_subtitle.innerText = subtitle;
+
+            // create natural subtitle p
+            var block_natural = document.createElement('p')
+            block_natural.className = 'sidepanel-subtitle'
+            block_natural.innerText = natural;
+
+            // append subtitle, title and natural to wrapper
+            wrapper.appendChild(block_subtitle);
+            wrapper.appendChild(block_title);
+            wrapper.appendChild(block_natural);
+            
+            // add onlcick to remove
+            wrapper.onclick = () => {
+                wrapper.remove();
+            }
+            
+            // append wrapper to sidepanel
+            document.querySelector('.sidepanel').appendChild(wrapper);
+
+        }
+
+        const urlParams = new URLSearchParams(window.location.search)
+        if (urlParams.has('new')) {
+            document.querySelector('.create-character-gui').className = "create-character-gui"; // remove hidden class from create character div
+            document.querySelector('.overlay-wrapper').className = "overlay-wrapper" // remove hidden class from overlay-wrapper
+        } else if (urlParams.has('load')) {
+            document.querySelector('.load-character-gui').className = "load-character-gui"; // remove hidden class from create character div
+            document.querySelector('.overlay-wrapper').className = "overlay-wrapper" // remove hidden class from overlay-wrapper
+        }
+
+
+        //// LANGUAGE & TEXT ////
+
+        // change language-select value to current one
+        //document.querySelector('#language-select').value = localStorage.getItem('language');
+
+        // apply text to page when language file loads
+        var allDom = document.getElementsByTagName("*");
+        langscript.onload = () => {
+            for(var i =0; i < allDom.length; i++){
+                var elem = allDom[i];
+                var key = elem.getAttribute('data-tag');
+            
+                if(key != null) {
+                     console.log(key);
+                     elem.innerHTML = lang[key]  ;
+                }
+            }
+        }
+    </script>
+</body>
+</html>

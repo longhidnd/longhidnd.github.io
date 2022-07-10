@@ -3,22 +3,76 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
         <meta name="description" content="LonghiDND: Create and manage your Dungeons & Dragons character for free.">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
         <title>LonghiDND</title>
         <link rel="stylesheet" href="styles/global.css">
         <link rel="stylesheet" href="styles/index.css">
+
+        <script>
+            //// ERRORS ////
+
+            // if browser doesnt support localStorage, error out.
+            if (!localStorage) {
+                window.location.assign('/error.html?no_localStorage'); // redirect to no_localStorage error page.
+            }
+
+            //// LANGUAGE & TEXT ////
+
+            // load language file, if no language is set, use en_US
+            if(localStorage.getItem('language') != null) {
+                language = localStorage.getItem('language');
+            } else {
+                language = "en_US";
+                localStorage.setItem("language", "en_US");
+            }
+            langscript = document.createElement('script');
+            langscript.src = "language/"+language+".js";
+            document.head.appendChild(langscript);
+        </script>
     </head>
     <body>
-        <div class="page-header">
-            <img src="resources/logo.svg" alt="" class="logo">
-        </div>
+
+        <select name="language-select" id="language-select" onchange="localStorage.setItem('language', document.querySelector('#language-select').value); location.reload();">
+            <option value="en_US">🇺🇸</option>
+            <option value="pt_BR">🇧🇷</option>
+            <!--<option value="jp_JP">🇯🇵</option> -->
+        </select>
 
         <div class="index-page-title-wrapper">
             <h1 class="index-page-title">
-                LonghiDND
+                Longhi<accent-color>DND</accent-color>
             </h1>
-            <h1 class="index-page-subtitle">
-                Create and manage your Dungeons & Dragons character for free.
-            </h1>
+            
+            <h1 class="index-page-subtitle" data-tag="index.slogan"></h1>
         </div>
+
+        <div class="flexrow">
+            <div class="big-btn" onclick="window.location.assign('/character.html?new')" data-tag="index.createnew"></div>
+            <div class="big-btn" onclick="window.location.assign('/character.html?load')" data-tag="index.load"></div>
+        </div>
+
+        <script defer>
+
+            //// LANGUAGE & TEXT ////
+
+            // change language-select value to current one
+            document.querySelector('#language-select').value = localStorage.getItem('language');
+
+            // apply text to page when language file loads
+            var allDom = document.getElementsByTagName("*");
+            langscript.onload = () => {
+                for(var i =0; i < allDom.length; i++){
+                    var elem = allDom[i];
+                    var key = elem.getAttribute('data-tag');
+
+                    if(key != null) {
+                         console.log(key);
+                         elem.innerHTML = lang[key]  ;
+                    }
+                }
+            }
+        </script>
     </body>
 </html>
